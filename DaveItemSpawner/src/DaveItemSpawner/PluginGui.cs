@@ -1,4 +1,4 @@
-
+```csharp
 using UnityEngine;
 
 namespace DaveItemSpawner;
@@ -457,4 +457,3 @@ public sealed class PluginGui
         );
     }
 }
-```
