@@ -1,4 +1,3 @@
-```csharp
 using UnityEngine;
 
 namespace DaveItemSpawner;
