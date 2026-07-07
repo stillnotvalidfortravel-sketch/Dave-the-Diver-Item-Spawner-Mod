@@ -25,7 +25,6 @@ public sealed class PluginGui
     private GUIStyle _windowStyle;
     private Texture2D _blackTexture;
 
-
     public PluginGui(GameItemCatalog catalog, GameItemAdder adder, int maxResults)
     {
         _catalog = catalog;
@@ -48,7 +47,6 @@ public sealed class PluginGui
         _windowStyle.onNormal.textColor = Color.white;
     }
 
-
     public void Draw()
     {
         // Draw in logical pixels, then scale once so layout remains consistent across resolutions.
@@ -63,7 +61,6 @@ public sealed class PluginGui
             new Vector3(scale, scale, 1f)
         );
 
-
         // Use black background instead of default Unity window
         GUILayout.BeginArea(
             windowRect,
@@ -74,15 +71,12 @@ public sealed class PluginGui
 
         GUILayout.EndArea();
 
-
         GUI.matrix = previousMatrix;
     }
-
 
     private void DrawPanel()
     {
         GUILayout.BeginVertical();
-
 
         if (!_catalog.TryRefresh())
         {
@@ -90,7 +84,6 @@ public sealed class PluginGui
             GUILayout.EndVertical();
             return;
         }
-
 
         GUILayout.BeginHorizontal();
 
@@ -100,7 +93,6 @@ public sealed class PluginGui
         );
 
         _query = GUILayout.TextField(_query);
-
 
         GUILayout.Label(
             "Amount",
@@ -114,39 +106,31 @@ public sealed class PluginGui
 
         GUILayout.EndHorizontal();
 
-
-
         var results = ItemSearch.Filter(
             _catalog.Entries,
             _query,
             _maxResults
         );
 
-
         GUILayout.Label(
             $"Results: {results.Count}",
             GUILayout.Height(20)
         );
-
-
 
         _scroll = GUILayout.BeginScrollView(
             _scroll,
             GUILayout.Height(GetResultsHeight())
         );
 
-
         foreach (var entry in results)
         {
             var selected =
                 _selected?.Tid == entry.Tid;
 
-
             var label =
                 selected
                 ? $"> {entry.Display}"
                 : entry.Display;
-
 
             if (GUILayout.Button(
                 label,
@@ -158,13 +142,9 @@ public sealed class PluginGui
             }
         }
 
-
         GUILayout.EndScrollView();
 
-
-
         GUILayout.BeginHorizontal();
-
 
         if (GUILayout.Button(
             "Add Selected",
@@ -173,7 +153,6 @@ public sealed class PluginGui
             AddSelected();
         }
 
-
         if (GUILayout.Button(
             "Add TID",
             GUILayout.Height(32)))
@@ -181,10 +160,7 @@ public sealed class PluginGui
             AddTidFromSearch();
         }
 
-
         GUILayout.EndHorizontal();
-
-
 
         GUILayout.Label(
             _selected is null
@@ -192,14 +168,10 @@ public sealed class PluginGui
             : $"Selected: {_selected.Display}"
         );
 
-
         GUILayout.Label(_status);
-
 
         GUILayout.EndVertical();
     }
-
-
 
     private void AddSelected()
     {
@@ -209,23 +181,18 @@ public sealed class PluginGui
             return;
         }
 
-
         if (!TryGetAmount(out var amount))
         {
             return;
         }
-
 
         var result = _adder.Add(
             _selected,
             amount
         );
 
-
         _status = result.Message;
     }
-
-
 
     private void AddTidFromSearch()
     {
@@ -239,12 +206,10 @@ public sealed class PluginGui
             return;
         }
 
-
         if (!TryGetAmount(out var amount))
         {
             return;
         }
-
 
         var entry =
             _catalog.Entries.FirstOrDefault(
@@ -252,11 +217,9 @@ public sealed class PluginGui
             ??
             _catalog.CreateFallback(tid);
 
-
         _selected = entry;
 
         _query = tid.ToString();
-
 
         var result =
             _adder.Add(
@@ -264,11 +227,8 @@ public sealed class PluginGui
                 amount
             );
 
-
         _status = result.Message;
     }
-
-
 
     private bool TryGetAmount(out int amount)
     {
@@ -282,13 +242,10 @@ public sealed class PluginGui
             return false;
         }
 
-
         _amountText = amount.ToString();
 
         return true;
     }
-
-
 
     private static float GetUiScale()
     {
@@ -297,7 +254,6 @@ public sealed class PluginGui
 
         var heightScale =
             Screen.height / BaseScreenHeight;
-
 
         return Mathf.Clamp(
             Mathf.Min(
@@ -308,8 +264,6 @@ public sealed class PluginGui
         );
     }
 
-
-
     private static Rect GetWindowRect(float scale)
     {
         var logicalScreenWidth =
@@ -318,14 +272,12 @@ public sealed class PluginGui
         var logicalScreenHeight =
             Screen.height / scale;
 
-
         var width =
             Mathf.Min(
                 BaseWindowWidth,
                 logicalScreenWidth -
                 (MinMargin * 2f)
             );
-
 
         var height =
             Mathf.Min(
@@ -334,7 +286,6 @@ public sealed class PluginGui
                 (MinMargin * 2f)
             );
 
-
         var x =
             Mathf.Max(
                 MinMargin,
@@ -342,14 +293,12 @@ public sealed class PluginGui
                 width) * 0.5f
             );
 
-
         var y =
             Mathf.Max(
                 MinMargin,
                 (logicalScreenHeight -
                 height) * 0.5f
             );
-
 
         return new Rect(
             x,
@@ -359,8 +308,6 @@ public sealed class PluginGui
         );
     }
 
-
-
     private static float GetResultsHeight()
     {
         var scale = GetUiScale();
@@ -368,10 +315,8 @@ public sealed class PluginGui
         var logicalScreenHeight =
             Screen.height / scale;
 
-
         var availableHeight =
             logicalScreenHeight - 260f;
-
 
         return Mathf.Clamp(
             availableHeight,
